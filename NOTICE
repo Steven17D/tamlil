@@ -1,0 +1,36 @@
+Tamlil
+Copyright 2026 Steven Dashevsky
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Trademarks. "Tamlil" is a name used by the project's owner. Section 6 of the
+Apache License grants no trademark rights: the license covers the copyrighted
+source, not the use of this name, logos, or marks.
+
+This product bundles and makes use of third-party components. Their licenses,
+attributions, and the obligations they carry are enumerated in
+THIRD_PARTY_LICENSES. The notices below are reproduced here as required by
+those components' terms.
+
+--------------------------------------------------------------------------------
+RNNoise model weights (bundled: src/tamlil/assets/rnnoise/bd.rnnn)
+--------------------------------------------------------------------------------
+The "beguiling-drafter" model weights (bd.rnnn) are obtained from
+GregorR/rnnoise-models (https://github.com/GregorR/rnnoise-models). The author
+disclaims copyright on the weights, stating: "With the exception of the tools/
+directory and this file, none of this work is creative and thus none of it is
+subject to copyright."
+
+The RNNoise software that FFmpeg's arnndn filter implements is a separate work,
+Copyright (c) Xiph.Org Foundation and Jean-Marc Valin (with Mozilla and Mark
+Borgerding), licensed under the BSD 3-Clause License. Its full text is in
+THIRD_PARTY_LICENSES.
+
+--------------------------------------------------------------------------------
+FFmpeg (fetched at runtime; not bundled in this repository)
+--------------------------------------------------------------------------------
+Tamlil invokes the FFmpeg multimedia framework as a separate program at
+runtime. FFmpeg is not included in this repository; it is downloaded per machine
+by the static-ffmpeg package. The build in use is a GPL build of FFmpeg. See
+THIRD_PARTY_LICENSES for details, including the GPL obligation and the location
+of FFmpeg's corresponding source.

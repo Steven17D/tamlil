@@ -1,0 +1,41 @@
+# Generic technical glossary that biases the decoder toward English terms
+# spoken inside Hebrew speech. One term or phrase per line, ASCII only.
+#
+# Keep this seed generic and committable. Your own product names, services,
+# and colleague names are learned per-user from real meetings into the
+# gitignored dictionary.json at the repo root -- they belong there, not here.
+deploy
+production
+staging
+environment
+code review
+pull request
+merge
+CI
+CD
+pipeline
+unit tests
+integration tests
+logs
+vulnerability
+authentication
+authorization
+token
+validation
+OAuth
+JWT
+Kubernetes
+cluster
+container
+Docker
+latency
+throughput
+endpoint
+API
+service
+microservice
+database
+query
+cache
+rollback
+feature flag

@@ -1,0 +1,120 @@
+Third-party licenses and attributions
+======================================
+
+Tamlil is licensed under the Apache License, Version 2.0 (see LICENSE and
+NOTICE). This file enumerates the third-party components Tamlil bundles or
+relies on at runtime, their licenses, and the obligations those licenses carry.
+
+Scope: this covers the runtime Python dependencies declared in pyproject.toml,
+the bundled RNNoise model weights, and the FFmpeg binary fetched at runtime.
+Development-only tooling (pytest, ruff, hatchling) is not distributed with the
+product and is not enumerated here.
+
+
+1. RNNoise model weights — bd.rnnn ("beguiling-drafter")
+--------------------------------------------------------
+Bundled at: src/tamlil/assets/rnnoise/bd.rnnn
+Source:     https://github.com/GregorR/rnnoise-models
+
+These are trained model weights, not source code. The author (Gregor Richards)
+makes the following statement about copyright, reproduced verbatim:
+
+    "With the exception of the tools/ directory and this file, none of this
+    work is creative and thus none of it is subject to copyright."
+
+The weights are therefore distributed as not subject to copyright (a public
+domain dedication). No license notice is required, and none is imposed on
+Tamlil by their inclusion.
+
+
+2. RNNoise software — Xiph.Org (implemented by FFmpeg's arnndn filter)
+---------------------------------------------------------------------
+Source: https://github.com/xiph/rnnoise
+
+The RNNoise noise-suppression algorithm that FFmpeg's `arnndn` filter
+implements is a separate work from the weights above. It is licensed under the
+BSD 3-Clause License. Tamlil does not bundle or link this source; it is noted
+here to correct the record and because the weights above are trained for it.
+
+    Copyright (c) 2017, Mozilla
+    Copyright (c) 2007-2017, Jean-Marc Valin
+    Copyright (c) 2005-2017, Xiph.Org Foundation
+    Copyright (c) 2003-2004, Mark Borgerding
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+    - Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+
+    - Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+
+    - Neither the name of the Xiph.Org Foundation nor the names of its
+      contributors may be used to endorse or promote products derived from
+      this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+    ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+    A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE FOUNDATION
+    OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+3. FFmpeg — fetched at runtime, not bundled
+-------------------------------------------
+Homepage: https://ffmpeg.org
+Used by:  src/tamlil/util.py (ffmpeg_path / ffprobe_path) and
+          src/tamlil/denoise.py (arnndn / aresample / highpass filters)
+
+Tamlil does not include an FFmpeg binary in this repository. The static-ffmpeg
+package (see below) downloads one to the local machine on first use, and Tamlil
+invokes it as a separate program via subprocess. Tamlil neither links against
+FFmpeg nor redistributes the binary.
+
+License and build variant. FFmpeg's own code is dual-licensed: the core is
+LGPL-2.1-or-later, but a build that enables GPL-only components becomes
+GPL-2.0-or-later as a whole. The build fetched by static-ffmpeg 3.0 (from
+https://github.com/zackees/ffmpeg_bins) is a GPL build: its reported
+configuration includes `--enable-gpl` together with GPL-only components
+(libx264, libx265, libvidstab, postproc) and does NOT include `--enable-nonfree`
+(so it remains redistributable under the GPL). Treat the fetched FFmpeg binary
+as GPL-2.0-or-later.
+
+Obligation. Because Tamlil calls FFmpeg as a separate program and does not
+distribute it, the GPL's copyleft does not extend to Tamlil's own
+Apache-2.0-licensed code. Anyone who chooses to redistribute the fetched FFmpeg
+binary must comply with the GPL, including making the corresponding source
+available. FFmpeg's complete source is at https://ffmpeg.org and
+https://github.com/FFmpeg/FFmpeg.
+
+
+4. Runtime Python dependencies
+------------------------------
+Declared in pyproject.toml [project.dependencies]. Versions below are the
+resolved versions verified when this file was authored; all are permissive
+(non-copyleft). Consult each project for the full license text.
+
+  - google-api-python-client (2.197.0) — Apache-2.0
+      https://github.com/googleapis/google-api-python-client
+  - google-auth-oauthlib (1.4.0) — Apache-2.0
+      https://github.com/googleapis/google-auth-library-python-oauthlib
+  - mcp (1.27.2) — MIT
+      https://github.com/modelcontextprotocol/python-sdk
+  - numpy (2.4.6) — BSD-3-Clause
+      (bundles components under 0BSD, MIT, Zlib, and CC0-1.0)
+      https://github.com/numpy/numpy
+  - requests (2.34.2) — Apache-2.0
+      https://github.com/psf/requests
+  - static-ffmpeg (3.0) — MIT
+      https://github.com/zackees/static_ffmpeg
+      Note: static-ffmpeg's own code is MIT. It downloads the FFmpeg binary
+      described in section 3, which carries its own (GPL) license.

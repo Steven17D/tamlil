@@ -1,0 +1,104 @@
+[project]
+name = "tamlil"
+version = "1.0.0"
+description = "macOS menu bar meeting recorder with Hebrew/English Soniox transcription and MCP access for agents"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "Steven Dashevsky", email = "dashevskysteven@gmail.com" }]
+requires-python = ">=3.12"
+keywords = [
+    "transcription",
+    "speech-to-text",
+    "meetings",
+    "soniox",
+    "mcp",
+    "macos",
+    "hebrew",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: MacOS X",
+    "Intended Audience :: Developers",
+    "Operating System :: MacOS :: MacOS X",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+    "Topic :: Office/Business",
+]
+dependencies = [
+    "google-api-python-client>=2.130",
+    "google-auth-oauthlib>=1.2",
+    "mcp>=1.27.2",
+    "numpy>=2.0",
+    "requests>=2.34.2",
+    "static-ffmpeg>=3.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Steven17D/tamlil"
+Repository = "https://github.com/Steven17D/tamlil"
+Issues = "https://github.com/Steven17D/tamlil/issues"
+
+[project.scripts]
+tamlil-pipeline = "tamlil.meeting_pipeline:main"
+tamlil-transcribe = "tamlil.transcribe_soniox:main"
+tamlil-roster = "tamlil.roster:main"
+tamlil-auth = "tamlil.google_oauth:main"
+tamlil-mcp = "tamlil.mcp_server:main"
+tamlil-compact = "tamlil.compact:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tamlil"]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.13",
+    "pytest>=8.0",
+    "pytest-cov>=6.0",
+    "ruff>=0.8",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+# Beyond the default E+F: import sorting (I), pyupgrade (UP), bugbear (B),
+# comprehensions (C4), simplify (SIM), and blind-except (BLE001) so the
+# `# noqa: BLE001` suppressions are meaningful. RUF100 keeps them honest by
+# flagging any noqa that stops matching a real diagnostic.
+select = ["E", "F", "I", "UP", "B", "C4", "SIM", "BLE001", "RUF100"]
+
+# Lenient start: check annotations without demanding full coverage. Third-party
+# stubs are spotty (google-api-python-client, mcp, static_ffmpeg), so missing
+# imports are ignored rather than gated. Tighten toward --strict later.
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+
+# The package lives under src/ and is installed editable, so name-form coverage
+# (--cov=tamlil) needs source_pkgs to map the name to the src tree; without it
+# coverage collects no data on this layout.
+[tool.coverage.run]
+source_pkgs = ["tamlil"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+# -ra summarizes non-passing outcomes; --strict-markers/--strict-config reject
+# unknown markers and config (see filterwarnings below for the enforced marker
+# check); coverage is report-only (no fail-under).
+addopts = "-ra --strict-markers --strict-config --cov=tamlil --cov-report=term-missing"
+markers = [
+    "requires_ffmpeg: test needs the ffmpeg binary; skipped when it is absent",
+]
+# pytest 9 only warns (not errors) on an unknown mark when --strict-markers is
+# set via addopts rather than the command line, so `uv run pytest` would let a
+# typo'd marker through. Promoting the warning to an error restores the gate.
+filterwarnings = [
+    "error::pytest.PytestUnknownMarkWarning",
+]

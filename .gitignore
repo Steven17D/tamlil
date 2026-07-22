@@ -1,0 +1,64 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Test & coverage artifacts
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+
+# Virtual environments
+.venv
+
+# Generated transcripts and synthesized/recorded audio (keep source text only)
+test-assets/*.aiff
+test-assets/*.wav
+test-assets/*.m4a
+test-assets/*.mp3
+test-assets/test.json
+test-assets/test.txt
+test-assets/test.srt
+*.corrected.json
+*.corrected.txt
+
+# Real meeting recordings / transcripts — never commit
+recordings/
+transcripts/
+
+# Tamlil app build artifacts
+Tamlil/.build/
+Tamlil/dist/
+*.uncertain.json
+*.corrected.srt
+terms.local.txt
+system.orig.wav
+
+# Bring-your-own Google OAuth client id/secret — never commit
+google_client.local.json
+
+# Local-only denylist of real customer/product names, read by local tooling
+# and never committed; the names live only on the dev machine
+scripts/terms-denylist.local
+
+# raw correction log; the lexicon ingests it into dictionary.json
+learned.jsonl
+
+# Per-user learned lexicon — grown from real meetings, never shared
+dictionary.json
+dictionary.json.tmp
+dictionary.json.corrupt
+
+# Recording databases — hold real meeting metadata, never commit
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+*.sqlite-wal
+*.sqlite-shm
