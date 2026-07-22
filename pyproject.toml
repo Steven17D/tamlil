@@ -30,7 +30,7 @@ dependencies = [
     "google-api-python-client>=2.130",
     "google-auth-oauthlib>=1.2",
     "mcp>=1.27.2",
-    "numpy>=2.0",
+    "numpy>=2.5.1",
     "requests>=2.34.2",
     "static-ffmpeg>=3.0",
 ]
