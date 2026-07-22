@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Least privilege: CI only needs to read the checked-out tree.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: Python (ruff + mypy + pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      # Fails if any first-party Python/Swift/shell source lacks an
+      # Apache-2.0 SPDX header. Needs only git + bash, so it runs before uv.
+      - name: SPDX headers
+        run: scripts/check-spdx.sh
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+      - name: Install dependencies
+        run: uv sync
+      - name: Lint (ruff check)
+        run: uv run ruff check .
+      - name: Format check (ruff format)
+        run: uv run ruff format --check .
+      - name: Type-check (mypy)
+        run: uv run mypy src
+      # ffmpeg is not preinstalled: the conftest probe fetches a static build
+      # over the network on first use; if that fetch fails, the ffmpeg-binary
+      # tests skip (not error), keeping the gate green either way.
+      - name: Test
+        run: uv run pytest -q
+
+  swift:
+    name: Swift self-check
+    runs-on: macos-15
+    defaults:
+      run:
+        working-directory: Tamlil
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      # No Xcode/XCTest on this project: swift test is unavailable, so the app
+      # embeds its own assertion harness run via --self-check (see Makefile).
+      - name: Build
+        run: swift build
+      - name: Self-check
+        run: swift run Tamlil --self-check

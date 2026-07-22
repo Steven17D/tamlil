@@ -1,0 +1,4 @@
+אני חושב שצריך לעשות deploy של ה service ל production אחרי שנסיים את ה code review.
+ה pull request שלך נכשל ב CI כי ה unit tests לא עברו, תבדוק את ה logs.
+מצאנו vulnerability ב authentication, ה token לא עובר validation נכון, צריך לתקן את ה OAuth flow.
+בוא נריץ את ה Kubernetes cluster על ה staging environment ונמדוד את ה latency.
