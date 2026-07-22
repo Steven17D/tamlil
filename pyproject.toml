@@ -58,7 +58,7 @@ packages = ["src/tamlil"]
 [dependency-groups]
 dev = [
     "mypy>=1.13",
-    "pytest>=8.0",
+    "pytest>=9.1.1",
     "pytest-cov>=6.0",
     "ruff>=0.8",
 ]
